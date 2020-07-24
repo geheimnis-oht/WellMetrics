@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>add a Perimeter</title>
+<!-- High chart & Bootstrap CDN -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+	crossorigin="anonymous">
+
+<style type="text/css">
+	 .error {
+		color: #D8000C;
+		background-color: #FFBABA;
+		font-size: 15px;
+		font-style: italic;
+	}
+</style>
+</head>
+<body>
+
+ <a th:href="@{'/api/perimeters'}">Back to MainPage</a><br>
+ <a th:href="@{'/api/wells/add'}">Add a new Well</a><br>
+ 
+ <div class="container">
+	  <div class="col-lg-6 offset-md-3">
+	    <div class="card card-body">
+	    
+	      <form action= "#"  th:action="@{/api/perimeters/save}"  th:object="${perimeter}" method="post">
+	       
+	       <div class="form-group">
+	         <label for="perimeterID">Perimeter Name</label> 
+	         <input class="form-control" type="text" name="perimeterName" id="perimeterNameID" th:field="*{perimeterName}" placeholder="Perimeter Name ...">
+	         <span  class="error" th:if="${#fields.hasErrors('perimeterName')}" th:errors="*{perimeterName}">Perimeter Name Error</span>
+	       </div>
+	       
+	       <div class="form-group">
+	          <button type="submit" class="btn btn-primary btn-sm">Add Perimeter</button>	      
+	       </div>
+	       
+	        <div class="form-group">
+	          <a th:href="@{'/api/perimeters'}">Back to MainPage</a><br>
+	       </div>
+	       
+	      </form>
+        </div>
+      </div>
+    </div>
+ 
+ 
+
+</body>
+</html>

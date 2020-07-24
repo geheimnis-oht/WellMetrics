@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<title>add a Well</title>
+<!-- High chart & Bootstrap CDN -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+	crossorigin="anonymous">
+
+</head>
+<body>
+
+ <a th:href="@{'/home'}">Back to MainPage</a><br>
+ 
+ <div class="container">
+	  <div class="col-lg-6 offset-md-3">
+	    <div class="card card-body">
+	    
+	      <form action= "#"  th:action="@{/api/wells/save}"  th:object="${newWell}" method="post">
+	       
+	       <div class="form-group">
+	         <label for="wellID">Well Name</label> 
+	         <input class="form-control" type="text" name="wellName" id="fullNameID" th:field="*{wellName}" placeholder="Well Name">
+	         <span  class="error" th:if="${#fields.hasErrors('wellName')}" th:errors="*{wellName}" >Well Name Error</span>
+	       </div>
+	       
+	       <div class="form-group">
+	         <label for="startDateID">Start Date</label> 
+	         <input class="form-control" type="date" name="startDate" id="startDateID" th:field="*{startDate}" placeholder="Start Date ...">
+	         <span class="error" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}" >Start Date Error</span>
+	       </div>
+	       
+	        <div class="form-group">
+	         <label for="wellTypeID">Well Type</label> <br>
+	         <select class="form-control" th:field="*{wellType}" id="wellTypeID">
+		       <option th:each="type : ${wellTypeEnum}"
+		               th:text="${type.wt}"
+		               th:value="${wt}"> 
+		      </select>   
+	       </div>
+	       
+	       <div class="form-group">
+	         <label for="perimeterID">Perimeter</label> 
+	         <select id="perimeterID" th:field="*{perimeter}" class="form-control">
+				  <!-- Data will be inserted here by JQuery + Ajax -->	 
+			 </select>
+	       </div>
+	       
+	       <div class="form-group">
+	         <label for="wellFieldTypeID">Well Field Type</label> <br>
+	         <select class="form-control" th:field="*{field}" id="wellFieldTypeID">
+		       <option th:each="type : ${wellFieldTypeEnum}"
+		               th:text="${type.wft}"
+		               th:value="${wft}"> 
+		      </select>   
+	       </div>
+	       
+	       <div class="form-group">
+	         <label for="latitudeID">latitude</label> 
+	         <input class="form-control" type="text" name="latitude" id="latitudeID" th:field="*{latitude}" placeholder="latitude ...">
+	         <span  class="error" th:if="${#fields.hasErrors('latitude')}" th:errors="*{latitude}">latitude Error</span>
+	       </div>
+	       
+	       <div class="form-group">
+	         <label for="longitudeID">latitude</label> 
+	         <input class="form-control" type="text" name="longitude" id="longitudeID" th:field="*{longitude}" placeholder="longitude ...">
+	         <span  class="error" th:if="${#fields.hasErrors('longitude')}" th:errors="*{longitude}">longitude Error</span>
+	       </div>
+   
+	       <div class="form-group">
+	          <button type="submit" class="btn btn-primary btn-sm">Add Well</button>	      
+	       </div>
+	       
+	        <div class="form-group">
+	          <a th:href="@{'/api/wells'}">Back to MainPage</a><br>
+	       </div>
+	       
+	      </form>
+        </div>
+      </div>
+    </div>
+ 
+<!---------------------------------------------------------------------------------------------------------->
+<script type="text/javascript"> 
+     $(document).ready(function(){   	        	 
+    		 $.ajax({
+    			 url:'/api/rest/perimeters/all',  /* Restful call */ 
+    			 type:'GET',    		
+    			 datatype:'json',
+    			 success : function(data){
+    				  /* Data is under JSON format, a list of Key-Value*/
+    				  console.log(data);
+    				  $("#perimeterID").empty();
+    				  $("#perimeterID").append('<option disabled>Please select...</option>');
+    				  $.each(data, function(key, value){ 			
+    					  $("#perimeterID").append('<option value='+value.uid+'>'+value.perimeterName+'</option>');			  
+    				  });
+    				  $("#perimeterID").html+='</select>';  				
+    			 },
+    			 error : function(){
+    				 console.error('AJAX callback has failed ...'); 
+    			 }
+    		 }); 
+     }); 
+</script>	
+ 
+
+</body>
+</html>

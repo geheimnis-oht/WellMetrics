@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>List of All Wells</title>
+<!-- High chart & Bootstrap CDN -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+	crossorigin="anonymous">
+
+</head>
+<body>
+
+ <a th:href="@{'/'}">Back to MainPage</a><br>
+ <a th:href="@{'/api/wells/add'}">Add a new Well</a><br>
+ <a th:href="@{'/api/perimeters/add'}">Add a new Perimeter</a><br>
+ <a th:href="@{'/api/fields/add'}">Add a new Field</a><br>
+ 
+ <div class="container">    
+    <table id="wellTBL" class="table table-sm table-bordered table-striped table-hover">
+    <thead>
+     <tr><td><input type="checkbox" value="N" id="main_checkbox"></td><td>UID</td><td>WellName</td><td>Field</td><td>perimeter</td><td>well.mecanoCode</td><td>Edit</td><td>Delete</td><td>Marks</td><td>Chart</td></tr>
+    </thead>
+    <tbody>
+     <tr th:each="well : ${wells}">
+        <td><input type="checkbox" value="N" class="checkbox_cls"></td>
+        <td th:text="${well.uid}"/>
+        <td th:text="${well.WellName}"/>
+        <td th:text="${well.field}"/>
+        <td th:text="${well.perimeter}"/>
+        <td th:text="${well.mecanoCode}"/>
+        <td> <a th:href="@{'/edit/' + ${well.uid}}">Edit</a> </td> 
+        <td> <a th:href="@{'/delete/' + ${well.uid}}">Delete</a> </td>
+        <td> <a th:href="@{'/mark/' + ${well.uid}}">Marks</a> </td> 
+        <td> <a th:href="@{'/chart/' + ${well.uid}}">Chart</a> </td>    
+     </tr>
+    </tbody>  
+  </table> 
+  </div>
+
+</body>
+</html>

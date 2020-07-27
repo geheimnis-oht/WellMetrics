@@ -15,7 +15,7 @@ public class WellDAO implements IWellDAO {
 	private IWellRepo wellRepo;
 	
 	@Override
-	public void addWell(Well well) {
+	public void saveWell(Well well) {
 		wellRepo.save(well);
 	}
 	

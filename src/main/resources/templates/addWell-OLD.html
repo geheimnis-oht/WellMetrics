@@ -12,15 +12,6 @@
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
 	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
 	crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" 
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" 
-        crossorigin="anonymous">
-</script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" 
-		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" 
-		crossorigin="anonymous">
-</script>
-
 <style type="text/css">
 	 .error {
 		color: #D8000C;
@@ -32,81 +23,89 @@
 </head>
 <body>
 
- <div th:replace="fragments/top :: navbar">
- </div>
-
  <a th:href="@{'/home'}">Back to MainPage</a><br>
  
  <div class="container">
 	  <div class="col-lg-6 offset-md-3">
 	    <div class="card card-body">
- 
- <form action= "#"  th:action="@{/api/wells/save}"  th:object="${well}" method="post">
-  <!--------- FIRST ROW ---------->
-	  <div class="form-row">
-	    <div class="form-group col-md-6">
-	      <label for="wellID">Well Name</label> 
-		  <input class="form-control" type="text" name="wellName" id="fullNameID" th:field="*{wellName}" placeholder="Well Name">
-		  <span  class="error" th:if="${#fields.hasErrors('wellName')}" th:errors="*{wellName}" >Well Name Error</span>
-	    </div>
-	    <div class="form-group col-md-3">
-	      <label for="wellTypeID">Well Type</label> <br>
-		         <select class="form-control" th:field="*{wellType}" id="wellTypeID">
-			       <option th:each="type : ${wellTypeEnum}"
-			               th:text="${type.wt}"
-			               th:value="${type}"> 
-			      </select>
-	    </div>
 	    
-	    <div class="form-group col-md-3">
-	      <label for="wellFieldTypeID">Reservoir Type</label> <br>
-		         <select class="form-control" th:field="*{reservoirType}" id="reservoirTypeID">
-			       <option th:each="type : ${reservoirTypeEnum}"
-			               th:text="${type.rt}"
-			               th:value="${type}"> 
-			      </select> 
-	    </div>  
-	  </div>
-  <!--------- SECOND ROW ---------->
-   <div class="form-row">
-	    <div class="form-group col-md-6">
-	       <label for="latitudeID">latitude</label> 
-	         <input class="form-control" type="number" step="0.0001" name="latitude" id="latitudeID" th:field="*{latitude}" placeholder="0.0000">
-	         <span  class="error" th:if="${#fields.hasErrors('latitude')}" th:errors="*{latitude}">latitude Error</span>
-	    </div>
-	    <div class="form-group col-md-6">
-	        <label for="longitudeID">longitude</label> 
-	         <input class="form-control" type="number" step="0.0001" name="longitude" id="longitudeID" th:field="*{longitude}" placeholder="0.0000">
-	         <span  class="error" th:if="${#fields.hasErrors('longitude')}" th:errors="*{longitude}">longitude Error</span>
-	    </div>
-   </div>	    
- <!--  --> 
-  <div class="form-group">
+	      <form action= "#"  th:action="@{/api/wells/save}"  th:object="${well}" method="post">
+	       
+	       <div class="form-group">
+	         <label for="wellID">Well Name</label> 
+	         <input class="form-control" type="text" name="wellName" id="fullNameID" th:field="*{wellName}" placeholder="Well Name">
+	         <span  class="error" th:if="${#fields.hasErrors('wellName')}" th:errors="*{wellName}" >Well Name Error</span>
+	       </div>
+	       
+	       <div class="form-group">
 	         <label for="startDateID">Start Date</label> 
 	         <input class="form-control" type="date" name="startDate" id="startDateID" th:field="*{startDate}" placeholder="Start Date ...">
 	         <span class="error" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}" >Start Date Error</span>
 	       </div>
- <!--  --> 
-  <div class="form-group">
+	       
+	        <div class="form-group">
+	         <label for="wellTypeID">Well Type</label> <br>
+	         <select class="form-control" th:field="*{wellType}" id="wellTypeID">
+		       <option th:each="type : ${wellTypeEnum}"
+		               th:text="${type.wt}"
+		               th:value="${type}"> 
+		      </select>   
+	       </div>
+	       
+<!-- 	       <div class="form-group"> -->
+<!-- 	         <label for="perimeterID">Perimeter</label>  -->
+<!-- 	         <select id="perimeterID" th:field="*{perimeter}" class="form-control"> -->
+<!-- 				  Data will be inserted here by JQuery + Ajax	  -->
+<!-- 			 </select> -->
+<!-- 	       </div> -->
+	       
+<!-- 	       <div class="form-group"> -->
+<!-- 	         <label for="fieldID">Field</label>  -->
+<!-- 	         <select id="fieldID" th:field="*{field}" class="form-control"> -->
+<!-- 				  Data will be inserted here by JQuery + Ajax	  -->
+<!-- 			 </select> -->
+<!-- 	       </div> -->
+	       
+	       <div class="form-group">
+	         <label for="wellFieldTypeID">Reservoir Type</label> <br>
+	         <select class="form-control" th:field="*{reservoirType}" id="reservoirTypeID">
+		       <option th:each="type : ${reservoirTypeEnum}"
+		               th:text="${type.rt}"
+		               th:value="${type}"> 
+		      </select>   
+	       </div>
+	       
+	       <div class="form-group">
+	         <label for="latitudeID">latitude</label> 
+	         <input class="form-control" type="text" name="latitude" id="latitudeID" th:field="*{latitude}" placeholder="latitude ...">
+	         <span  class="error" th:if="${#fields.hasErrors('latitude')}" th:errors="*{latitude}">latitude Error</span>
+	       </div>
+	       
+	       <div class="form-group">
+	         <label for="longitudeID">latitude</label> 
+	         <input class="form-control" type="text" name="longitude" id="longitudeID" th:field="*{longitude}" placeholder="longitude ...">
+	         <span  class="error" th:if="${#fields.hasErrors('longitude')}" th:errors="*{longitude}">longitude Error</span>
+	       </div>
+	       
+	       <div class="form-group">
 	         <label for="mecanoCodeID">Mecano. Code</label> 
 	         <input class="form-control" type="text" name="mecanoCode" id="mecanoCodeID" th:field="*{mecanoCode}" placeholder="Mecano Code ...">
 	         <span  class="error" th:if="${#fields.hasErrors('mecanoCode')}" th:errors="*{mecanoCode}">MecanoCode Error</span>
 	       </div>
- <!--  --> 
-  
-  <div class="form-group">
+   
+	       <div class="form-group">
 	          <button type="submit" class="btn btn-primary btn-sm">Add Well</button>	      
 	       </div>
 	       
-  <div class="form-group">
-	 <a th:href="@{'/api/wells'}">Back to MainPage</a><br>
-  </div>
-</form>
+	        <div class="form-group">
+	          <a th:href="@{'/api/wells'}">Back to MainPage</a><br>
+	       </div>
+	       
+	      </form>
+        </div>
+      </div>
+    </div>
  
-   </div>
- </div>
-</div>
-  
 <!---------------------------------------------------------------------------------------------------------->
 <script type="text/javascript"> 
      $(document).ready(function(){   	        	 

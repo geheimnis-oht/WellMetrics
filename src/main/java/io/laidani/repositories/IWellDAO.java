@@ -6,7 +6,7 @@ import io.laidani.models.Well;
 
 public interface IWellDAO {
 
-	void addWell(Well well);
+	void saveWell(Well well);
 
 	List<Well> getWellByName(String name);
 
@@ -15,5 +15,7 @@ public interface IWellDAO {
 	void updateWell(int uid, Well dirtyWell);
 
 	List<Well> getAllWells();
+
+	void deleteWell(int id);
 
 }

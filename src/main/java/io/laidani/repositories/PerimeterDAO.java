@@ -25,7 +25,7 @@ public class PerimeterDAO implements IPerimeterDAO {
 	}
 	
 	@Override
-	public void addPerimeter(Perimeter perimeter) {
+	public void savePerimeter(Perimeter perimeter) {
 		perimeterRepo.save(perimeter);
 	}
 	

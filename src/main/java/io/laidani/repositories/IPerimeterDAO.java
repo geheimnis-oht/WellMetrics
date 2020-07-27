@@ -13,7 +13,7 @@ public interface IPerimeterDAO {
 
 	void updatePerimeter(Perimeter perimeter, int id);
 
-	void addPerimeter(Perimeter perimeter);
+	void savePerimeter(Perimeter perimeter);
 
 	void deletePerimeter(int id);
 

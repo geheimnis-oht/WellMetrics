@@ -15,7 +15,7 @@ public class FieldDAO implements IFieldDAO {
 	IFieldRepo fieldRepo;
 	
 	@Override
-	public void addField(Field field) {
+	public void saveField(Field field) {
 	 fieldRepo.save(field);	
 	}
 	

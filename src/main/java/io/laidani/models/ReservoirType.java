@@ -1,6 +1,6 @@
 package io.laidani.models;
 
-public enum WellFieldType {
+public enum ReservoirType {
 	F1 ("F1"), 
 	F2 ("F2"), 
 	F3 ("F3"), 
@@ -10,14 +10,13 @@ public enum WellFieldType {
 	ORDO ("ORDOVICIEN"),
 	OXX ("OTHERS");
 	
-	private final String wft;
+	private final String rt;
 
-	WellFieldType(String wft) {
-		this.wft = wft;
+	private ReservoirType(String rt) {
+		this.rt = rt;
 	}
 
-	public String getWft() {
-		return wft;
+	public String getRt() {
+		return rt;
 	}
-
 }

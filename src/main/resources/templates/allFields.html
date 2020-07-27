@@ -6,13 +6,27 @@
 <title>List of All Perimeters</title>
 <!-- High chart & Bootstrap CDN -->
 <script src="https://code.highcharts.com/highcharts.js"></script>
+<!-- Jquery -->
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!-- Bootstrap and Popper -->
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
 	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
 	crossorigin="anonymous">
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" 
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" 
+        crossorigin="anonymous">
+</script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" 
+		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" 
+		crossorigin="anonymous">
+</script>
 </head>
 <body>
+
+ <div th:replace="fragments/top :: navbar">
+ </div>
 
  <a th:href="@{'/home'}">Back to MainPage</a><br>
  <a th:href="@{'/api/fields/add'}">Add a new field</a><br>
@@ -20,14 +34,16 @@
  <div class="container">    
     <table id="wellTBL" class="table table-sm table-bordered table-striped table-hover">
     <thead>
-     <tr><td><input type="checkbox" value="N" id="main_checkbox"></td><td>UID</td><td>field Name</td><td>Edit</td><td>Delete</td><td>Marks</td><td>Chart</td></tr>
+     <tr><td><input type="checkbox" value="N" id="main_checkbox"></td><td>UID</td><td>field Name</td><td>field Desc</td><td>wells</td><td>Edit</td><td>Delete</td><td>Marks</td><td>Chart</td></tr>
     </thead>
     <tbody>
      <tr th:each="field : ${fields}">
         <td><input type="checkbox" value="N" class="checkbox_cls"></td>
         <td th:text="${field.uid}"/>
         <td th:text="${field.fieldName}"/>
+        <td th:text="${field.fieldDesc}"/>
         
+        <td> <a th:href="@{'/api/fields/' + ${field.uid} +'/wells'}">Wells</a> </td> 
         <td> <a th:href="@{'/api/fields/edit/' + ${field.uid}}">Edit</a> </td> 
         <td> <a th:href="@{'/api/fields/delete/' + ${field.uid}}">Delete</a> </td>
         <td> <a th:href="@{'/mark/' + ${field.uid}}">Marks</a> </td> 

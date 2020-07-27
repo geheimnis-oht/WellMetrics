@@ -1,6 +1,7 @@
 package io.laidani.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,27 @@ public class WellService implements IWellService{
 	}	
 	
 	@Override
-	public void addWell (Well well) {
-		wellDAO.addWell(well);
+	public Optional<Well> findWellById(int id) {		
+		return wellDAO.getWellById(id);
+	}
+	
+	@Override
+	public void saveWell (Well well) {
+		wellDAO.saveWell(well);
+	}
+	
+	@Override
+	public void deleteWell (int id) {
+		wellDAO.deleteWell(id);
+	}
+	
+	@Override
+	public void updateWell(Well well, int id) {
+		Optional<Well> opWell = wellDAO.getWellById(id);
+		if (opWell.isPresent()) {
+			well.setUid(id);
+			wellDAO.saveWell(well);
+		} 
 	}
 
 }

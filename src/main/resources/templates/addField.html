@@ -10,7 +10,14 @@
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
 	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
 	crossorigin="anonymous">
-
+<style type="text/css">
+	 .error {
+		color: #D8000C;
+		background-color: #FFBABA;
+		font-size: 15px;
+		font-style: italic;
+	}
+</style>
 </head>
 <body>
 
@@ -27,6 +34,12 @@
 	         <label for="fieldID">Field Name</label> 
 	         <input class="form-control" type="text" name="fieldName" id="fieldNameID" th:field="*{fieldName}" placeholder="field Name ...">
 	         <span  class="error" th:if="${#fields.hasErrors('fieldName')}" th:errors="*{fieldName}">Field Name Error</span>
+	       </div>
+	       
+	       <div class="form-group">
+	         <label for="fieldDescID">Field Desc</label> 
+	         <input class="form-control" type="text" name="fieldDesc" id="fieldDescID" th:field="*{fieldDesc}" placeholder="field Desc ...">
+	         <span  class="error" th:if="${#fields.hasErrors('fieldDesc')}" th:errors="*{fieldDesc}">Field Desc Error</span>
 	       </div>
 	       
 	       <div class="form-group">

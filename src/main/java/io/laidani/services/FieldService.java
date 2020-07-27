@@ -21,8 +21,8 @@ public class FieldService implements IFieldService {
 	}
 	
 	@Override
-	public void addField(Field field) {
-		fieldDAO.addField(field);
+	public Optional<Field> findFieldById(int id){
+		return fieldDAO.getFieldById(id);
 	}
 	
 	@Override
@@ -30,7 +30,7 @@ public class FieldService implements IFieldService {
 		Optional<Field> opField = fieldDAO.getFieldById(id);
 		if (opField.isPresent()) {
 			field.setUid(id);
-			fieldDAO.addField(field);
+			fieldDAO.saveField(field);
 		}
 	}
 	
@@ -43,7 +43,7 @@ public class FieldService implements IFieldService {
 
 	@Override
 	public void saveField(Field field) {
-		fieldDAO.addField(field);
+		fieldDAO.saveField(field);
 	}
 
 }   

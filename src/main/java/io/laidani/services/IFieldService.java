@@ -1,12 +1,11 @@
 package io.laidani.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import io.laidani.models.Field;
 
 public interface IFieldService {
-
-	void addField(Field field);
 
 	void updateField(Field field, int id);
 
@@ -15,5 +14,7 @@ public interface IFieldService {
 	void deleteField(int id);
 
 	void saveField(Field field);
+
+	Optional<Field> findFieldById(int id);
 
 }

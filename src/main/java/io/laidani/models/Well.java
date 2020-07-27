@@ -1,7 +1,9 @@
 package io.laidani.models;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -9,16 +11,23 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
-import javax.persistence.ForeignKey;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 
 @Entity
@@ -29,8 +38,10 @@ public class Well {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "UID")
 	private int uid;
+	@Size(min = 3, max = 6, message = "Well name length should be between 3 and 6 characters !")
 	@Column(name ="WELL_NAME")
 	private String wellName;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@Column(name = "START_DATE")
 	private LocalDate startDate;
 	@Column(name = "CREATION_DATE")
@@ -40,30 +51,53 @@ public class Well {
 	@Enumerated(EnumType.STRING)
 	private WellType wellType;
 	
-	@Column(name = "MECANO_CODE", unique = true, length = 7)
+	@Column(name = "RESERVOIR_TYPE")
+	@Enumerated(EnumType.STRING)
+	private ReservoirType reservoirType;
+	
+	@Size(min = 3, max = 6, message = "Mecano Code length should be between 3 and 6 characters !")
+	@Column(name = "MECANO_CODE")
 	private String mecanoCode;
 	
+	@Min(value = (long) -85.05112878, message = "min value is -85.05112878")
+	@Max(value =  (long) 85.05112878, message = "max value is 85.05112878")
 	@Column(name="LATITUDE")
-	private long latitude;
+	private BigDecimal latitude;
+	
+	@Min(value = -180, message = "min value is -180")
+	@Max(value = 180, message = "max value is 180")
 	@Column(name = "LONGITUDE")
-	private long longitude;
-		
-//	@OneToMany(mappedBy = "well", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//	private List<Chuck> chucks;
+	private BigDecimal longitude;
+	
+	/*
+	 * TECH : Prevent recursive association in ManyToOne Hibernate (@JsonManagedReference, @JsonBackReference)
+	 *        -> use @JsonIgnore on one side of the ManyToOne relationship to break the cycle
+	 */
 	
 	@ManyToOne 
 	@JoinColumn(name = "PERIMETER", foreignKey = @ForeignKey(name = "FK_WELL_PERIMETER"))
+	@JsonManagedReference
 	private Perimeter perimeter;
 	
 	@ManyToOne
 	@JoinColumn(name = "FIELD", foreignKey = @ForeignKey(name = "FK_WELL_FIELD"))
+	@JsonManagedReference
 	private Field field;
 	
-	@OneToMany(mappedBy = "well", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Perforation> perfos;
+	@OneToMany(mappedBy = "well", cascade = CascadeType.ALL)
+	private List<Perforation> perfos = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "well", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<WellTest> tests;
+	@OneToMany(mappedBy = "well", cascade = CascadeType.ALL)
+	private List<WellTest> tests = new ArrayList<>();
+	
+	@PrePersist
+	protected void prePersiste() {
+		this.creationDate = LocalDateTime.now();
+	}
+	
+	public Well() {
+
+	}
 
 	// Getters and Setters
 	public int getUid() {
@@ -114,19 +148,19 @@ public class Well {
 		this.mecanoCode = mecanoCode;
 	}
 
-	public long getLatitude() {
+	public BigDecimal getLatitude() {
 		return latitude;
 	}
 
-	public void setLatitude(long latitude) {
+	public void setLatitude(BigDecimal latitude) {
 		this.latitude = latitude;
 	}
 
-	public long getLongitude() {
+	public BigDecimal getLongitude() {
 		return longitude;
 	}
 
-	public void setLongitude(long longitude) {
+	public void setLongitude(BigDecimal longitude) {
 		this.longitude = longitude;
 	}
 
@@ -160,6 +194,14 @@ public class Well {
 
 	public void setTests(List<WellTest> tests) {
 		this.tests = tests;
+	}
+
+	public ReservoirType getReservoirType() {
+		return reservoirType;
+	}
+
+	public void setReservoirType(ReservoirType reservoirType) {
+		this.reservoirType = reservoirType;
 	}
 	
 }

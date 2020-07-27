@@ -1,7 +1,9 @@
 package io.laidani.controllers;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -16,7 +18,10 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import io.laidani.models.Field;
+import io.laidani.models.Perimeter;
+import io.laidani.models.Well;
 import io.laidani.services.IFieldService;
+import io.laidani.services.IWellService;
 
 @Controller
 @RequestMapping(path = "/api/fields")
@@ -26,9 +31,15 @@ public class FieldController implements WebMvcConfigurer {
 	public static final String ALL_FIELDS_PAGE = "allFields";
 	public static final String REDIRECT_ALL_FIELDS = "redirect:/api/fields/all";
 	
+	public static final String ALL_FIELD_WELLS_PAGE = "fieldWells";
+	public static final String MAP_WELL_TO_FIELD = "mapWellField";
+	
 	
 	@Autowired
 	IFieldService fieldService;
+	
+	@Autowired
+	IWellService wellService;
 
 	@GetMapping(value = "/add")
 	public ModelAndView addField(ModelAndView modelAndView) {
@@ -74,7 +85,51 @@ public class FieldController implements WebMvcConfigurer {
 		
 		return modelAndView;
 	}
-	
-	
 
+	@GetMapping(value = "/{id}/wells")
+	public ModelAndView getAllFields(@PathVariable(name = "id") int id, ModelAndView modelAndView) {
+		Map<String, Object> map = new HashMap<String, Object>();
+	    Optional<Field> opField = fieldService.findFieldById(id);
+		if (opField.isPresent()) {
+			List<Well> wells = opField.get().getWells();
+			map.put("wells", wells);
+			map.put("field", opField.get());
+			modelAndView.addAllObjects(map);
+			modelAndView.setViewName(ALL_FIELD_WELLS_PAGE);
+		}
+		return modelAndView;
+	}
+	
+	@PostMapping(value = "/{id}/wells/map/confirm")
+	public ModelAndView confirmWellMapping(@PathVariable(name = "id") int id, Well well, ModelAndView modelAndView) {
+		Map<String, Object> map = new HashMap<String, Object>();
+	    Optional<Field> opField = fieldService.findFieldById(id);
+		if (opField.isPresent()) {
+			
+			Well cleanWell = wellService.findWellById(well.getUid()).get();
+			cleanWell.setField(opField.get());
+			wellService.saveWell(cleanWell);
+			List<Well> wells = opField.get().getWells();
+			map.put("wells", wells);
+			map.put("field", opField.get());
+			modelAndView.addAllObjects(map);
+			modelAndView.setViewName(ALL_FIELD_WELLS_PAGE);
+		}
+		return modelAndView;
+	}
+
+	@GetMapping(value = "/{id}/wells/map")
+	public ModelAndView mapFieldToPerimeter(@PathVariable(name = "id") int id, ModelAndView modelAndView) {
+		Map<String, Object> map = new HashMap<String, Object>();
+	    Optional<Field> opField = fieldService.findFieldById(id);
+		if (opField.isPresent()) {
+			Well well = new Well();
+			map.put("well", well);
+			map.put("field", opField.get());
+			modelAndView.addAllObjects(map);
+			modelAndView.setViewName(MAP_WELL_TO_FIELD);
+		}
+		return modelAndView;
+	}
+	
 }

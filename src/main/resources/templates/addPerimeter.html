@@ -22,7 +22,7 @@
 </head>
 <body>
 
- <a th:href="@{'/api/perimeters'}">Back to MainPage</a><br>
+ <a th:href="@{'/api/perimeters/all'}">Back to MainPage</a><br>
  <a th:href="@{'/api/wells/add'}">Add a new Well</a><br>
  
  <div class="container">
@@ -35,6 +35,12 @@
 	         <label for="perimeterID">Perimeter Name</label> 
 	         <input class="form-control" type="text" name="perimeterName" id="perimeterNameID" th:field="*{perimeterName}" placeholder="Perimeter Name ...">
 	         <span  class="error" th:if="${#fields.hasErrors('perimeterName')}" th:errors="*{perimeterName}">Perimeter Name Error</span>
+	       </div>
+	       
+	       <div class="form-group">
+	         <label for="perimeterDescID">Perimeter Desc</label> 
+	         <input class="form-control" type="text" name="perimeterDesc" id="perimeterDescID" th:field="*{perimeterDesc}" placeholder="Perimeter Desc ...">
+	         <span  class="error" th:if="${#fields.hasErrors('perimeterDesc')}" th:errors="*{perimeterDesc}">Perimeter Desc Error</span>
 	       </div>
 	       
 	       <div class="form-group">

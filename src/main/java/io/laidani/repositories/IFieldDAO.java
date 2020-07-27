@@ -13,7 +13,7 @@ public interface IFieldDAO {
 
 	List<Field> getAllFields();
 
-	void addField(Field field);
+	void saveField(Field field);
 
 	void deleteField(int id);
 

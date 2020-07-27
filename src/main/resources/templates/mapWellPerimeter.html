@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org/">
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<title>Map a Well To a perimeter</title>
+<!-- High chart & Bootstrap CDN -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+	integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+	crossorigin="anonymous">
+<style type="text/css">
+	 .error {
+		color: #D8000C;
+		background-color: #FFBABA;
+		font-size: 15px;
+		font-style: italic;
+	}
+</style>
+</head>
+<body>
+
+ <a th:href="@{'/home'}">Back to MainPage</a><br>
+ 
+ <div class="container">
+	  <div class="col-lg-6 offset-md-3">
+	    <div class="card card-body">
+	    
+	      <form action= "#"  th:action="@{'/api/perimeters/' + ${perimeter.uid} +'/wells/map/confirm'}"  th:object="${well}" method="post">
+	       	       	       
+	       <div class="form-group">
+	         <label for="wellID">Field</label> 
+	         <select id="wellID" th:field="*{uid}" class="form-control">
+				  <!--Data will be inserted here by JQuery + Ajax-->	 
+			 </select>
+	       </div>
+	       
+<!-- 	        <input name="createdBy" type="hidden" id="createdBy" th:field="*{createdBy}"> -->
+	        
+	       <div class="form-group">
+	          <button type="submit" class="btn btn-primary btn-sm">Confirm Well Mapping</button>	      
+	       </div>
+	       
+	        <div class="form-group">
+	          <a th:href="@{'/home'}">Back to MainPage</a><br>
+	       </div>
+	       
+	      </form>
+        </div>
+      </div>
+    </div>
+ 
+<!---------------------------------------------------------------------------------------------------------->
+<script type="text/javascript"> 
+     $(document).ready(function(){   	        	 
+    		 $.ajax({
+    			 url:'/api/rest/wells/dtos/all',  /* Restful call */ 
+    			 type:'GET',    		
+    			 datatype:'json',
+    			 success : function(data){
+    				  /* Data is under JSON format, a list of Key-Value*/
+    				  console.log(data);
+    				  $("#wellID").empty();
+    				  $("#wellID").append('<option disabled>Please select...</option>');
+    				  $.each(data, function(key, value){ 			
+    					  $("#wellID").append('<option value='+value.uid+'>'+value.wellName+'</option>');			  
+    				  });
+    				  $("#wellID").html+='</select>';  				
+    			 },
+    			 error : function(){
+    				 console.error('AJAX callback has failed ...'); 
+    			 }
+    		 }); 
+     }); 
+</script>	
+<!-- -------------------------------------------------------- -->
+
+<!-- <script type="text/javascript"> -->
+<!--       $(document).ready(function(){  -->
+<!--      		 var mid = '<c:out value="${mid}"></c:out>'; -->
+<!--      		 $.ajax({ -->
+<!--      			 url:'getdata', -->
+<!--      			 type:'GET', -->
+<!--      			 data:{mid:mid,origin:'!'}, -->
+<!--      			 datatype:'json', -->
+<!--      			 success : function(data){ -->
+    				 
+<!--      				  $("#bl_origin").empty(); -->
+<!--      				  $("#bl_destination").empty(); -->
+    				  
+<!--      				  $.each(data.flights, function(key, value){ -->
+<!--      					  //console.log(key); -->
+<!--      					  //console.log(value); -->
+<!--      					  //console.log(value.origin); -->
+<!--      					  $("#bl_origin").append('<option value='+value.origin+'>'+value.odesc+'</option>');			   -->
+<!--      				  }); -->
+<!--      				  $("#dv_origin").html+='</select>';  				 -->
+<!--      			 }, -->
+<!--      			 error : function(){ -->
+<!--      				 console.error('AJAX callback has failed ...');  -->
+<!--      			 } -->
+<!--      		 });  -->
+<!--       });  -->
+<!-- </script>	 -->
+
+
+</body>
+</html>

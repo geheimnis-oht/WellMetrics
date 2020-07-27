@@ -7,5 +7,5 @@ import io.laidani.models.Perimeter;
 
 @Repository
 public interface IPerimeterRepo extends JpaRepository<Perimeter, Integer> {
-
+	
 }

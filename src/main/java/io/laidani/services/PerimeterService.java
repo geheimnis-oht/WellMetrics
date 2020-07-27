@@ -1,6 +1,7 @@
 package io.laidani.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,18 +21,20 @@ public class PerimeterService implements IPerimeterService {
 	}
 	
 	@Override
-	public void addPerimeter(Perimeter perimeter) {
-		perimeterDAO.addPerimeter(perimeter);
+	public Optional<Perimeter> findPerimeterById(int id) {
+		return perimeterDAO.getPerimeterById(id);
 	}
 	
 	@Override
 	public void savePerimeter(Perimeter perimeter) {
-		perimeterDAO.addPerimeter(perimeter);
+		perimeterDAO.savePerimeter(perimeter);
 	}
 	
 	@Override
 	public void deletePerimeter(int id) {
 		perimeterDAO.deletePerimeter(id);
 	}
+	
+	
 	
 }

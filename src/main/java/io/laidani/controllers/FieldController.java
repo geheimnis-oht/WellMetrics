@@ -20,6 +20,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import io.laidani.models.Field;
 import io.laidani.models.Perimeter;
 import io.laidani.models.Well;
+import io.laidani.models.WellMapping;
+import io.laidani.repositories.IWellMappingDAO;
 import io.laidani.services.IFieldService;
 import io.laidani.services.IWellService;
 
@@ -40,6 +42,9 @@ public class FieldController implements WebMvcConfigurer {
 	
 	@Autowired
 	IWellService wellService;
+	
+	@Autowired
+	IWellMappingDAO wellMappingDAO;
 
 	@GetMapping(value = "/add")
 	public ModelAndView addField(ModelAndView modelAndView) {
@@ -106,12 +111,30 @@ public class FieldController implements WebMvcConfigurer {
 	    Optional<Field> opField = fieldService.findFieldById(id);
 		if (opField.isPresent()) {
 			
+			Field field = opField.get();
 			Well cleanWell = wellService.findWellById(well.getUid()).get();
-			cleanWell.setField(opField.get());
+			cleanWell.setField(field);
 			wellService.saveWell(cleanWell);
-			List<Well> wells = opField.get().getWells();
+			//Create or Update Well Mapping
+			int wid = cleanWell.getUid();
+			Optional<WellMapping> opWm = wellMappingDAO.findByWid(wid);
+			if (opWm.isPresent()) {
+				WellMapping wm = opWm.get();
+				wm.setFid(field.getUid());
+				wellMappingDAO.updateWm(wm.getUid(), wm);
+				/*
+				 * TODO : RabbiMQ can be used here for notification
+				 */
+			} else {
+				WellMapping newWM = new WellMapping();
+				newWM.setWid(wid);
+				newWM.setFid(field.getUid());
+				wellMappingDAO.saveWm(newWM);
+			}
+			
+			List<Well> wells = field.getWells();
 			map.put("wells", wells);
-			map.put("field", opField.get());
+			map.put("field", field);
 			modelAndView.addAllObjects(map);
 			modelAndView.setViewName(ALL_FIELD_WELLS_PAGE);
 		}

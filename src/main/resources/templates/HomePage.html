@@ -5,7 +5,7 @@
 <meta charset="ISO-8859-1">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<title>Home Page</title>
+<title>[[#{app.title}]]</title>
 <!-- High chart & Bootstrap CDN -->
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <link rel="stylesheet"
@@ -24,7 +24,8 @@
 <body>
 <div th:replace="fragments/top :: navbar">
 </div>
- 
+
+   <div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"/>
  
 </body>
 </html>

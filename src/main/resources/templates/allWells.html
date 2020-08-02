@@ -2,13 +2,15 @@
 <html xmlns:th="http://www.thymeleaf.org/">
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>List of All Wells</title>
+<meta charset="UTF-8">
+<title>[[#{app.pages.wells.all}]]</title>
 <!-- High chart & Bootstrap CDN -->
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <!-- Jquery -->
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
 <!-- Bootstrap and Popper -->
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
@@ -22,40 +24,74 @@
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" 
 		crossorigin="anonymous">
 </script>
+
 </head>
 <body>
 
   <div th:replace="fragments/top :: navbar">
  </div>
+ <!-- Notification Message -->
+ <div id="notification" th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"/>
  
  <div class="container">    
     <table id="wellTBL" class="table table-sm table-bordered table-striped table-hover">
-    <thead>
-     <tr><td><input type="checkbox" value="N" id="main_checkbox"></td><td>UID</td><td>WellName</td><td>Field</td><td>perimeter</td><td>Mecano Code</td><td>Reservoir</td><td>Well Type</td><td>Edit</td><td>Delete</td><td>Marks</td><td>Chart</td></tr>
-    </thead>
-    <tbody>
-     <tr th:each="well : ${wells}">
-        <td><input type="checkbox" value="N" class="checkbox_cls"></td>
-        <td th:text="${well.uid}"/>
-        <td th:text="${well.WellName}"/>
-        <!-- See link : https://www.baeldung.com/spring-thymeleaf-conditionals -->
-<!--    <td th:if="${well.field != null}" th:text="${well.field.fieldName}"/> -->
-        <td th:text="${well.field != null} ? ${well.field.fieldName} : '' "/>
-        
-<!--    <td th:if="${well.perimeter != null}" th:text="${well.perimeter.perimeterName}"/> -->
-        <td th:text="${well.perimeter != null} ? ${well.perimeter.perimeterName} : '' "/>
-        
-        <td th:text="${well.mecanoCode}"/>
-        <td th:text="${well.reservoirType}"/>
-        <td th:text="${well.wellType}"/>
-        <td> <a th:href="@{'/api/wells/edit/' + ${well.uid}}">Edit</a> </td> 
-        <td> <a th:href="@{'/api/wells/delete/' + ${well.uid}}">Delete</a> </td>
-        <td> <a th:href="@{'/mark/' + ${well.uid}}">Marks</a> </td> 
-        <td> <a th:href="@{'/chart/' + ${well.uid}}">Chart</a> </td>    
-     </tr>
-    </tbody>  
-  </table> 
+	    <thead>
+	     <tr><td><input type="checkbox" value="N" id="main_checkbox"></td>
+	     <td>
+	        <a th:href="@{'/api/wells/page/' + ${currentPage}} +'?field=uid&direction=' + ${direction}">[[#{app.pages.wells.uid}]]</a>
+	     </td>
+	     <td>
+	        <a th:href="@{'/api/wells/page/' + ${currentPage}} +'?field=wellName&direction=' + ${direction}">[[#{app.pages.wells.wellName}]]</a>
+	     </td>
+	     <td>
+	        <a th:href="@{'/api/wells/page/' + ${currentPage}} +'?field=field&direction=' + ${direction}">[[#{app.pages.wells.field}]]</a>
+	     </td>
+	     <td>
+	        <a th:href="@{'/api/wells/page/' + ${currentPage}} +'?field=perimeter&direction=' + ${direction}">[[#{app.pages.wells.perimeter}]]</a>
+	     </td>
+	     <td>
+	        <a th:href="@{'/api/wells/page/' + ${currentPage}} +'?field=mecanoCode&direction=' + ${direction}">[[#{app.pages.wells.meccode}]]</a>
+	     </td>
+	     <td>
+	        <a th:href="@{'/api/wells/page/' + ${currentPage}} +'?field=reservoirType&direction=' + ${direction}">[[#{app.pages.wells.reservoirType}]]</a>
+	     </td>
+	     <td>
+	        <a th:href="@{'/api/wells/page/' + ${currentPage}} +'?field=wellType&direction=' + ${direction}">[[#{app.pages.wells.wellType}]]</a>
+	     </td>
+	     <td>[[#{app.edit}]]</td><td>[[#{app.delete}]]</td><td>Marks</td><td>Chart</td></tr>
+	    </thead>
+	    <tbody>
+	     <tr th:each="well : ${wells}">
+	        <td><input type="checkbox" value="N" class="checkbox_cls"></td>
+	        <td th:text="${well.uid}"/>
+	        <td th:text="${well.WellName}"/>
+	        <!-- See link : https://www.baeldung.com/spring-thymeleaf-conditionals -->
+	        <td th:text="${well.field != null} ? ${well.field.fieldName} : '' "/>
+	        <td th:text="${well.perimeter != null} ? ${well.perimeter.perimeterName} : '' "/>
+	        
+	        <td th:text="${well.mecanoCode}"/>
+	        <td th:text="${well.reservoirType}"/>
+	        <td th:text="${well.wellType}"/>
+	        <td> <a th:href="@{'/api/wells/edit/' + ${well.uid}}">Edit</a> </td> 
+	        <td> <a th:href="@{'/api/wells/delete/' + ${well.uid}}">Delete</a> </td>
+	        <td> <a th:href="@{'/mark/' + ${well.uid}}">Marks</a> </td> 
+	        <td> <a th:href="@{'/chart/' + ${well.uid}}">Chart</a> </td>    
+	     </tr>
+	    </tbody>  
+	  </table> 
   </div>
+  
+  <div th:replace="fragments/well-paginator :: paginator">
+ </div>
+  
+ <script type="text/javascript">
+    
+  $().ready(function(){
+	  $('#notification').delay(2500);
+	  $('#notification').slideUp(800);
+  });
+  
+  </script>
 
 </body>
 </html>

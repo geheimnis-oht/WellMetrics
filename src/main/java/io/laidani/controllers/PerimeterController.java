@@ -19,9 +19,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import io.laidani.models.Perimeter;
 import io.laidani.models.Well;
+import io.laidani.models.WellMapping;
+import io.laidani.repositories.WellMappingDAO;
 import io.laidani.services.IPerimeterService;
 import io.laidani.services.IWellService;
-import io.laidani.services.WellService;
 
 @Controller
 @RequestMapping(path = "/api/perimeters")
@@ -39,6 +40,9 @@ public class PerimeterController implements WebMvcConfigurer {
 	
 	@Autowired
 	IWellService wellService;
+	
+	@Autowired
+	WellMappingDAO wellMappingDAO;
 	
 	@GetMapping(value = "/all")
 	public ModelAndView getAllPerimeters(ModelAndView modelAndView) {
@@ -78,15 +82,35 @@ public class PerimeterController implements WebMvcConfigurer {
 	@PostMapping(value = "/{id}/wells/map/confirm")
 	public ModelAndView confirmWellMapping(@PathVariable(name = "id") int id, Well well, ModelAndView modelAndView) {
 		Map<String, Object> map = new HashMap<String, Object>();
-	    Optional<Perimeter> OpPerimeter = perimeterService.findPerimeterById(id);
-		if (OpPerimeter.isPresent()) {
-			
+	    Optional<Perimeter> opPerimeter = perimeterService.findPerimeterById(id);
+		if (opPerimeter.isPresent()) {
+			Perimeter perimeter = opPerimeter.get();
 			Well cleanWell = wellService.findWellById(well.getUid()).get();
-			cleanWell.setPerimeter(OpPerimeter.get());
+			cleanWell.setPerimeter(perimeter);
 			wellService.saveWell(cleanWell);
-			List<Well> wells = OpPerimeter.get().getWells();
+			
+			int wid = cleanWell.getUid();
+			// create or update well mapping
+			Optional<WellMapping> opWM = wellMappingDAO.findByWid(wid);
+			
+			if ( opWM.isPresent() ) {
+				WellMapping wm = opWM.get();
+				wm.setPid(perimeter.getUid());
+				wellMappingDAO.updateWm(wm.getUid(), wm);
+				/*
+				 * TODO : RabbiMQ can be used here for notification
+				 */
+				
+			} else {
+				WellMapping newWM = new WellMapping();
+				newWM.setWid(cleanWell.getUid());
+				newWM.setPid(perimeter.getUid());
+                wellMappingDAO.saveWm(newWM);
+			}
+			
+			List<Well> wells = perimeter.getWells();
 			map.put("wells", wells);
-			map.put("perimeter", OpPerimeter.get());
+			map.put("perimeter", perimeter);
 			modelAndView.addAllObjects(map);
 			modelAndView.setViewName(ALL_PERIMETER_WELLS_PAGE);
 		}

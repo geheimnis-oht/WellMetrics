@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org/">
 <html>
 <head>
-<meta charset="UTF-8">
+<meta charset="ISO-8859-1">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<title>[[#{app.pages.wells.add}]]</title>
+<title>[[#{app.pages.wells.edit}]]</title>
 <!-- High chart & Bootstrap CDN -->
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <link rel="stylesheet"
@@ -34,8 +34,6 @@
 
  <div th:replace="fragments/top :: navbar">
  </div>
-<!-- Notification Message -->
- <div id="notification" th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"/>
 
  <a th:href="@{'/home'}">Back to MainPage</a><br>
  
@@ -43,61 +41,68 @@
 	  <div class="col-lg-6 offset-md-3">
 	    <div class="card card-body">
  
- <form action= "#"  th:action="@{/api/wells/save}"  th:object="${well}" method="post">
+ <form action= "#"  th:action="@{/api/wells/update}"  th:object="${well}" method="post">
   <!--------- FIRST ROW ---------->
 	  <div class="form-row">
 	    <div class="form-group col-md-6">
-	      <label for="wellID">[[#{app.pages.wells.wellName}]]</label> 
+	      <label for="wellID">Well Name</label> 
 		  <input class="form-control" type="text" name="wellName" id="wellNameID" th:field="*{wellName}" placeholder="Well Name">
 		  <span  class="error" th:if="${#fields.hasErrors('wellName')}" th:errors="*{wellName}" >Well Name Error</span>
 	    </div>
 	    <div class="form-group col-md-3">
-	      <label for="wellTypeID">[[#{app.pages.wells.wellType}]]</label> <br>
+	      <label for="wellTypeID">Well Type</label> <br>
 		         <select class="form-control" th:field="*{wellType}" id="wellTypeID">
 			       <option th:each="type : ${wellTypeEnum}"
 			               th:text="${type.wt}"
-			               th:value="${type}"> 
+			               th:value="${type}"
+			               th:selected="${type == well.wellType}"> 
 			      </select>
 	    </div>
 	    
 	    <div class="form-group col-md-3">
-	      <label for="wellFieldTypeID">[[#{app.pages.wells.reservoirType}]]</label> <br>
+	      <label for="wellFieldTypeID">Reservoir Type</label> <br>
 		         <select class="form-control" th:field="*{reservoirType}" id="reservoirTypeID">
 			       <option th:each="type : ${reservoirTypeEnum}"
 			               th:text="${type.rt}"
-			               th:value="${type}"> 
+			               th:value="${type}"
+			               th:selected="${type == well.reservoirType}"> 
 			      </select> 
 	    </div>  
 	  </div>
   <!--------- SECOND ROW ---------->
    <div class="form-row">
 	    <div class="form-group col-md-6">
-	       <label for="latitudeID">[[#{app.pages.wells.latitude}]]</label> 
+	       <label for="latitudeID">latitude</label> 
 	         <input class="form-control" type="number" step="0.5" name="latitude" id="latitudeID" th:field="*{latitude}" placeholder="0.0000">
 	         <span  class="error" th:if="${#fields.hasErrors('latitude')}" th:errors="*{latitude}">latitude Error</span>
 	    </div>
 	    <div class="form-group col-md-6">
-	        <label for="longitudeID">[[#{app.pages.wells.longitude}]]</label> 
+	        <label for="longitudeID">longitude</label> 
 	         <input class="form-control" type="number" step="0.5" name="longitude" id="longitudeID" th:field="*{longitude}" placeholder="0.0000">
 	         <span  class="error" th:if="${#fields.hasErrors('longitude')}" th:errors="*{longitude}">longitude Error</span>
 	    </div>
    </div>	    
  <!--  --> 
   <div class="form-group">
-	         <label for="startDateID">[[#{app.pages.wells.start}]]</label> 
+	         <label for="startDateID">Start Date</label> 
 	         <input class="form-control" type="date" name="startDate" id="startDateID" th:field="*{startDate}" placeholder="Start Date ...">
 	         <span class="error" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}" >Start Date Error</span>
 	       </div>
  <!--  --> 
   <div class="form-group">
-	         <label for="mecanoCodeID">[[#{app.pages.wells.meccode}]]</label> 
+	         <label for="mecanoCodeID">Mecano. Code</label> 
 	         <input class="form-control" type="text" name="mecanoCode" id="mecanoCodeID" th:field="*{mecanoCode}" placeholder="Mecano Code ...">
 	         <span  class="error" th:if="${#fields.hasErrors('mecanoCode')}" th:errors="*{mecanoCode}">MecanoCode Error</span>
 	       </div>
- <!--  --> 
+ 
+ <!-- HIDDEN FIELDS --> 
+   <input name="uid" type="hidden" id="uid" th:field="*{uid}">
+   <input name="creationDate" type="hidden" id="creationDate" th:field="*{creationDate}"> 
+<!--    <input name="field" type="hidden" id="field" th:field="*{field.uid}">  -->
+<!--    <input name="perimeter" type="hidden" id="perimeter" th:field="*{perimeter.uid}"> -->
   
   <div class="form-group">
-	          <button type="submit" class="btn btn-primary btn-sm">[[#{app.pages.wells.add}]]</button>	      
+	          <button type="submit" class="btn btn-warning btn-sm">Confirm Update</button>	      
 	       </div>
 	       
   <div class="form-group">
@@ -108,64 +113,6 @@
    </div>
  </div>
 </div>
-  
-<!---------------------------------------------------------------------------------------------------------->
-<script type="text/javascript"> 
-     $(document).ready(function(){   	        	 
-    		 $.ajax({
-    			 url:'/api/rest/perimeters/all',  /* Restful call */ 
-    			 type:'GET',    		
-    			 datatype:'json',
-    			 success : function(data){
-    				  /* Data is under JSON format, a list of Key-Value*/
-    				  console.log(data);
-    				  $("#perimeterID").empty();
-    				  $("#perimeterID").append('<option disabled>Please select...</option>');
-    				  $.each(data, function(key, value){ 			
-    					  $("#perimeterID").append('<option value='+value.uid+'>'+value.perimeterName+'</option>');			  
-    				  });
-    				  $("#perimeterID").html+='</select>';  				
-    			 },
-    			 error : function(){
-    				 console.error('AJAX callback has failed ...'); 
-    			 }
-    		 }); 
-     }); 
-</script>	
-
-<!---------------------------------------------------------------------------------------------------------->
-<script type="text/javascript"> 
-     $(document).ready(function(){   	        	 
-    		 $.ajax({
-    			 url:'/api/rest/fields/all',  /* Restful call */ 
-    			 type:'GET',    		
-    			 datatype:'json',
-    			 success : function(data){
-    				  /* Data is under JSON format, a list of Key-Value*/
-    				  console.log(data);
-    				  $("#fieldID").empty();
-    				  $("#fieldID").append('<option disabled>Please select...</option>');
-    				  $.each(data, function(key, value){ 			
-    					  $("#fieldID").append('<option value='+value.uid+'>'+value.fieldName+'</option>');			  
-    				  });
-    				  $("#fieldID").html+='</select>';  				
-    			 },
-    			 error : function(){
-    				 console.error('AJAX callback has failed ...'); 
-    			 }
-    		 }); 
-     }); 
-</script>
-
-<script type="text/javascript">
-    
-    $().ready(function(){
-	  $('#notification').delay(2500);
-	  $('#notification').slideUp(800);
-	});
-  
-</script>
- 
 
 </body>
 </html>

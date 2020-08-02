@@ -1,6 +1,6 @@
 <div th:fragment="navbar">
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-	  <a class="navbar-brand" href="#">Well Metrics</a>
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	  <a class="navbar-brand" href="#">[[#{app.title}]]</a>
 	  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 	    <span class="navbar-toggler-icon"></span>
 	  </button>
@@ -8,21 +8,18 @@
 	  <div class="collapse navbar-collapse" id="navbarSupportedContent">
 	    <ul class="navbar-nav mr-auto">
 	      <li class="nav-item active">
-	        <a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
+	        <a class="nav-link" href="/home">Home<span class="sr-only">(current)</span></a>
 	      </li>
-	      <li class="nav-item">
-	        <a class="nav-link" href="#">Link</a>
-	      </li>
-	      
+	      	      
 	      <li class="nav-item dropdown">
 	        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	          Wells
+	          [[#{menu.wells.title}]]
 	        </a>
 	        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-	          <a class="dropdown-item" href="/api/wells/all">List of Wells</a>
-	          <a class="dropdown-item" href="/api/wells/add">Add a new Well</a>
+	          <a class="dropdown-item" href="/api/wells/all">[[#{menu.wells.list}]]</a>
+	          <a class="dropdown-item" href="/api/wells/add">[[#{menu.wells.add}]]</a>
 	          <div class="dropdown-divider"></div>
-	          <a class="dropdown-item" href="/api/rest/wells/all">Wells (REST)</a>
+	          <a class="dropdown-item" href="/api/rest/wells/all">[[#{menu.wells.rest}]]</a>
 	        </div>
 	      </li>
 	      
@@ -31,28 +28,42 @@
 	          Perimeters
 	        </a>
 	        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-	          <a class="dropdown-item" href="/api/perimeters/all">List of Perimeters</a>
-	          <a class="dropdown-item" href="/api/perimeters/add">Add a new Perimeter</a>
+	          <a class="dropdown-item" href="/api/perimeters/all">[[#{menu.perimeters.list}]]</a>
+	          <a class="dropdown-item" href="/api/perimeters/add">[[#{menu.perimeters.add}]]</a>
 	          <div class="dropdown-divider"></div>
-	          <a class="dropdown-item" href="/api/rest/perimeters/all">Perimeters (REST)</a>
+	          <a class="dropdown-item" href="/api/rest/perimeters/all">[[#{menu.perimeters.rest}]]</a>
 	        </div>
 	      </li>
 	      
 	      <li class="nav-item dropdown">
 	        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-	          Fields
+	          [[#{menu.fields.title}]]
 	        </a>
 	        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-	          <a class="dropdown-item" href="/api/fields/all">List of Fields</a>
-	          <a class="dropdown-item" href="/api/fields/add">Add a new Field</a>
+	          <a class="dropdown-item" href="/api/fields/all">[[#{menu.fields.list}]]</a>
+	          <a class="dropdown-item" href="/api/fields/add">[[#{menu.fields.add}]]</a>
 	          <div class="dropdown-divider"></div>
-	          <a class="dropdown-item" href="/api/rest/fields/all">Fields (REST)</a>
+	          <a class="dropdown-item" href="/api/rest/fields/all">[[#{menu.fields.rest}]]</a>
 	        </div>
 	      </li>
 	      
-	      <li class="nav-item">
-	        <a class="nav-link disabled" href="#">Disabled</a>
+<!-- 	      <li class="nav-item"> -->
+<!-- 	        <a class="nav-link disabled" href="#">Disabled</a> -->
+<!-- 	      </li> -->
+	      
+	      <li class="nav-item dropdown">
+	        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	          langages
+	        </a>
+	        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+	          <a class="dropdown-item" th:href="@{&lang=en}">English</a>
+	          <a class="dropdown-item" th:href="@{&lang=de}">Deutsch</a>
+	          <a class="dropdown-item" th:href="@{&lang=fr}">Español</a>
+	          <a class="dropdown-item" th:href="@{&lang=es}">Français</a>
+	          
+	        </div>
 	      </li>
+	      
 	    </ul>
 	    <form class="form-inline my-2 my-lg-0">
 	      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">

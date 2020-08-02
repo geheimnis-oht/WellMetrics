@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import io.laidani.models.Well;
@@ -42,6 +43,11 @@ public class WellService implements IWellService{
 			well.setUid(id);
 			wellDAO.saveWell(well);
 		} 
+	}
+
+	@Override
+	public Page<Well> findAll(int pageNumber, String field, String direction) {
+		return wellDAO.listAll(pageNumber, field, direction);
 	}
 
 }
